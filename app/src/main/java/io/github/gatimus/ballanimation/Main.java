@@ -27,7 +27,7 @@ public class Main extends ActionBarActivity {
         fragMan = this.getFragmentManager();
         about = new About();
         help = new Help();
-        view = new Ball(this);
+        view = new Bounce(this);
         super.onCreate(savedInstanceState);
         setContentView(view.getRootView());
     } //onCreate
