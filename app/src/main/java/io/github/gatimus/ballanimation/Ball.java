@@ -72,6 +72,7 @@ public class Ball extends SurfaceView {
         shadow = new Paint();
         shadow.setStyle(Paint.Style.FILL);
         shadow.setColor(Color.LTGRAY);
+        shadow.setMaskFilter(new BlurMaskFilter(8, BlurMaskFilter.Blur.INNER));
         run = new Runnable(){
             @Override
             public void run() {
