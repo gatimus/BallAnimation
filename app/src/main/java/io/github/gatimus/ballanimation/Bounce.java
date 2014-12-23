@@ -1,7 +1,6 @@
 package io.github.gatimus.ballanimation;
 
 import android.content.Context;
-import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -12,6 +11,9 @@ import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class Bounce extends SurfaceView {
 
@@ -29,6 +31,7 @@ public class Bounce extends SurfaceView {
     private Paint bg;
     private Paint color;
     private Paint shadow;
+    private ArrayList<Ball> balls;
 
     public Bounce(Context context) {
         super(context);
@@ -51,6 +54,12 @@ public class Bounce extends SurfaceView {
 
             @Override
             public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+                viewSize = new PointF(width,height);
+                position = new PointF(viewSize.x/2, viewSize.y /2);
+
+                for(int i = 0; i<=15; i++){
+                    balls.add(new Ball(0,viewSize,75));
+                }
                 Log.v(TAG, "surfaceChanged");
             }
 
@@ -61,12 +70,14 @@ public class Bounce extends SurfaceView {
         Log.v(TAG, "FRAME_TIME:" + String.valueOf(FRAME_TIME));
         handler = new Handler();
         radius = 75;
+
         deltaY = 5;
         deltaX = 5;
         deltaZ = 1;
         bg = new Paint();
         bg.setStyle(Paint.Style.FILL);
         bg.setColor(Color.WHITE);
+        /*
         color = new Paint();
         color.setStyle(Paint.Style.FILL);
         color.setColor(Color.RED);
@@ -74,9 +85,13 @@ public class Bounce extends SurfaceView {
         shadow.setStyle(Paint.Style.FILL);
         shadow.setColor(Color.LTGRAY);
         shadow.setMaskFilter(new BlurMaskFilter(10, BlurMaskFilter.Blur.INNER));
+        */
+        balls = new ArrayList<>();
+
         run = new Runnable(){
             @Override
             public void run() {
+                /*
                 if(radius >= 100 || radius <= 50){
                     deltaZ = deltaZ * -1;
                 }
@@ -89,6 +104,10 @@ public class Bounce extends SurfaceView {
                 position.y = position.y + deltaY;
                 position.x = position.x + deltaX;
                 radius = radius + deltaZ;
+                */
+                for(Ball ball : balls){
+                    ball.move(15);
+                }
                 //Log.v(TAG, "Update Position");
                 invalidate();
             } //run()
@@ -99,10 +118,19 @@ public class Bounce extends SurfaceView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.drawPaint(bg);
+        /*
         canvas.drawCircle(position.x+radius-(radius/(float)Math.PI), position.y+radius-(radius/(float)Math.PI), 50-(radius-49), shadow);
         canvas.drawCircle(position.x, position.y, radius, color);
-        //setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        //canvas.drawVertices(Canvas.VertexMode.TRIANGLES, 6, new float[]{10,10,10,50,50,10}, 0, null, 0, new int[]{Color.RED,Color.RED,Color.RED,0xFF000000, 0xFF000000, 0xFF000000} , 0, null, 0, 0, new Paint());
+*/
+        Collections.sort(balls, Ball.BallCompar);
+        for(Ball ball : balls){
+            Ball shadow = ball.getShadow();
+            canvas.drawCircle(shadow.position.x, shadow.position.y, shadow.radius, shadow.paint);
+        }
+
+        for(Ball ball : balls){
+            canvas.drawCircle(ball.position.x, ball.position.y, ball.radius, ball.paint);
+        }
         //Log.v(TAG, "Draw");
         handler.postDelayed(run, FRAME_TIME);
     }
@@ -110,7 +138,7 @@ public class Bounce extends SurfaceView {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
         viewSize = new PointF(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(heightMeasureSpec));
-        position = new PointF(viewSize.x/2, viewSize.y /2);
+
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
