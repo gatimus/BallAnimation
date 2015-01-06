@@ -6,7 +6,7 @@
     <string name="action_about">About</string>
     <string name="action_help">Help</string>
     <string name="action_quit">Quit</string>
-    <string name="msg_about">This app utilizes multi-threading and Android's draw methods to animate bouncing balls.</string><!--TODO-->
+    <string name="msg_about">This app utilizes multi-threading and Android\'s draw methods to animate bouncing balls.</string><!--TODO-->
     <string name="msg_help">To change the speed or number of balls open the settings.</string><!--TODO-->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
