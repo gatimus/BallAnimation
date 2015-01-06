@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <net.jayschwa.android.preference.SliderPreference
+        android:key="num_slider"
+        android:title="@string/num_title"
+        android:summary="@array/num_summaries"
+        android:defaultValue="@string/num_default"
+        android:dialogMessage="@string/num_message" />
+
+    <net.jayschwa.android.preference.SliderPreference
+        android:key="speed_slider"
+        android:title="@string/speed_title"
+        android:summary="@array/speed_summaries"
+        android:defaultValue="@string/speed_default"
+        android:dialogMessage="@string/speed_message" />
+
 </PreferenceScreen>

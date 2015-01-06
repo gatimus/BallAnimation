@@ -4,29 +4,21 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/ball_animation_ic"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
             android:name=".Main"
             android:label="@string/app_name"
             android:hardwareAccelerated="false" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".Splash"
             android:label="@string/app_name" >
-            <!--TODO
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            -->
         </activity>
         <activity
             android:name=".Settings"

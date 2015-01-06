@@ -9,7 +9,7 @@ import android.util.Log;
 public class Splash extends Activity {
 
     private static final String TAG = "Splash:";
-    private static final int SPLASH_TIME_OUT = 1;
+    private static final int SPLASH_TIME_OUT = 3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

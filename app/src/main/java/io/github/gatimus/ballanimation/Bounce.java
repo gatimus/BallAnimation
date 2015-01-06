@@ -1,6 +1,7 @@
 package io.github.gatimus.ballanimation;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -22,18 +23,11 @@ public class Bounce extends SurfaceView {
     private SurfaceHolder holder;
     private Handler handler;
     private Runnable run;
-    private PointF position;
     private PointF viewSize;
-    private float radius;
-    private int deltaY;
-    private int deltaX;
-    private int deltaZ;
     private Paint bg;
-    private Paint color;
-    private Paint shadow;
     private ArrayList<Ball> balls;
 
-    public Bounce(Context context) {
+    public Bounce(Context context, final SharedPreferences sharedPreferences) {
         super(context);
         holder = getHolder();
         holder.addCallback(new SurfaceHolder.Callback() {
@@ -55,10 +49,10 @@ public class Bounce extends SurfaceView {
             @Override
             public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
                 viewSize = new PointF(width,height);
-                position = new PointF(viewSize.x/2, viewSize.y /2);
-
-                for(int i = 0; i<=15; i++){
-                    balls.add(new Ball(0,viewSize,75));
+                balls = new ArrayList<>();
+                int numBalls = (int) (sharedPreferences.getFloat("num_slider", 0.50F)*20);
+                for(int i = 0; i<=numBalls; i++){
+                    balls.add(new Ball(Ball.BALL,viewSize,75));
                 }
                 Log.v(TAG, "surfaceChanged");
             }
@@ -69,44 +63,18 @@ public class Bounce extends SurfaceView {
         FRAME_TIME = Math.round(1000/display.getRefreshRate());
         Log.v(TAG, "FRAME_TIME:" + String.valueOf(FRAME_TIME));
         handler = new Handler();
-        radius = 75;
-
-        deltaY = 5;
-        deltaX = 5;
-        deltaZ = 1;
         bg = new Paint();
         bg.setStyle(Paint.Style.FILL);
         bg.setColor(Color.WHITE);
-        /*
-        color = new Paint();
-        color.setStyle(Paint.Style.FILL);
-        color.setColor(Color.RED);
-        shadow = new Paint();
-        shadow.setStyle(Paint.Style.FILL);
-        shadow.setColor(Color.LTGRAY);
-        shadow.setMaskFilter(new BlurMaskFilter(10, BlurMaskFilter.Blur.INNER));
-        */
+
         balls = new ArrayList<>();
 
         run = new Runnable(){
             @Override
             public void run() {
-                /*
-                if(radius >= 100 || radius <= 50){
-                    deltaZ = deltaZ * -1;
-                }
-                if(position.y + radius >= viewSize.y-5 || position.y - radius <= 5){
-                    deltaY = deltaY * -1;
-                }
-                if(position.x + radius >= viewSize.x-5 || position.x - radius <= 5){
-                    deltaX = deltaX * -1;
-                }
-                position.y = position.y + deltaY;
-                position.x = position.x + deltaX;
-                radius = radius + deltaZ;
-                */
+                float speedBalls = sharedPreferences.getFloat("speed_slider", 0.50F)+0.01F;
                 for(Ball ball : balls){
-                    ball.move(15);
+                    ball.move(speedBalls);
                 }
                 //Log.v(TAG, "Update Position");
                 invalidate();
@@ -118,10 +86,7 @@ public class Bounce extends SurfaceView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.drawPaint(bg);
-        /*
-        canvas.drawCircle(position.x+radius-(radius/(float)Math.PI), position.y+radius-(radius/(float)Math.PI), 50-(radius-49), shadow);
-        canvas.drawCircle(position.x, position.y, radius, color);
-*/
+
         Collections.sort(balls, Ball.BallCompar);
         for(Ball ball : balls){
             Ball shadow = ball.getShadow();
@@ -135,11 +100,5 @@ public class Bounce extends SurfaceView {
         handler.postDelayed(run, FRAME_TIME);
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
-        viewSize = new PointF(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(heightMeasureSpec));
-
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-    }
 
 }

@@ -4,6 +4,7 @@ import android.graphics.BlurMaskFilter;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.Comparator;
@@ -12,7 +13,7 @@ import java.util.Random;
 public class Ball implements Comparable<Ball> {
 
     @Override
-    public int compareTo(Ball another) {
+    public int compareTo(@NonNull Ball another) {
         int compareRadius = (int) another.radius;
         return (int)this.radius - compareRadius;
     }
@@ -55,17 +56,15 @@ public class Ball implements Comparable<Ball> {
         this.directionX = random.nextBoolean();
         this.directionY = random.nextBoolean();
         this.directionZ = random.nextBoolean();
-        this.speed = random.nextInt(15) + 5;
+        this.speed = random.nextInt(20) + 5;
     } //constructor
 
     public Ball getShadow(){
         return new Ball(Ball.SHADOW, position, radius);
     } //getShadow
 
-    public void move(int delta){
-        delta = speed;
-        boolean doRadius = true;
-
+    public void move(float speed){
+        float delta = this.speed * speed;
 
         if(directionX){
             position.x = position.x + delta;

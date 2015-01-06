@@ -3,8 +3,10 @@ package io.github.gatimus.ballanimation;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -27,7 +29,9 @@ public class Main extends ActionBarActivity {
         fragMan = this.getFragmentManager();
         about = new About();
         help = new Help();
-        view = new Bounce(this);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        //Toast.makeText(getApplicationContext(),String.valueOf(sharedPreferences.getFloat("my_slider", 0.50F)),Toast.LENGTH_LONG).show();
+        view = new Bounce(this, sharedPreferences);
         super.onCreate(savedInstanceState);
         setContentView(view.getRootView());
     } //onCreate
